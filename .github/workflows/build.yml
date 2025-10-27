@@ -1,0 +1,35 @@
+name: Build release
+
+on:
+    workflow_dispatch:
+    push:
+        tags:
+          - 'v*'
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v5
+            with:
+                fetch-depth: 0
+
+          - name: Setup python
+            uses: actions/setup-python@v6
+            with:
+               python-version: '3.12'
+
+          - name: Create artifact
+            env:
+                NAME: ${{ github.event.repository.name }}
+                VERSION: ${{ github.ref_name }}
+            run: |
+                python ./.scripts/build.py
+
+          - name: Create release
+            uses: ncipollo/release-action@v1
+            with:
+                artifacts: "./.build/*.zip"
