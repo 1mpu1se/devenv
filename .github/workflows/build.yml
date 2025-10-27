@@ -1,7 +1,6 @@
 name: Build release
 
 on:
-    workflow_dispatch:
     push:
         tags:
           - 'v*'
@@ -22,12 +21,12 @@ jobs:
             with:
                python-version: '3.12'
 
-          - name: Create artifact
+          - name: Build artifact
             env:
                 NAME: ${{ github.event.repository.name }}
                 VERSION: ${{ github.ref_name }}
             run: |
-                python ./.scripts/build.py
+                python ./.github/scripts/build.py
 
           - name: Create release
             uses: ncipollo/release-action@v1
