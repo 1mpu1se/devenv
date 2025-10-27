@@ -1,4 +1,4 @@
-# devenv [![Build](https://github.com/1mpu1se/devenv/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/1mpu1se/devenv/actions/workflows/build.yml)
+# devenv [![Build](https://github.com/1mpu1se/devenv/actions/workflows/build.yml/badge.svg)](https://github.com/1mpu1se/devenv/actions/workflows/build.yml)
 Окружение для разработки.
 
 
