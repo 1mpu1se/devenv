@@ -31,3 +31,16 @@ services:
           - "9000:9000"
         volumes:
           - ./data/minio:/data
+
+    # Elasticsearch
+    elasticsearch:
+        image: elasticsearch:9.2.0
+        restart: always
+        environment:
+          - discovery.type=single-node
+          - ELASTIC_PASSWORD=elastic
+          - ES_JAVA_OPTS=-Xms512m -Xmx512m
+        ports:
+          - "9200:9200"
+        volumes:
+          - ./data/elasticsearch:/usr/share/elasticsearch/data
