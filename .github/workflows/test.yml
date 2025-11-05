@@ -25,7 +25,11 @@ jobs:
 
           - name: Run services
             run: |
-                docker compose up -d && sleep 120
+                docker compose up -d && sleep 30
+
+          - name: Explore process status
+            run: |
+                docker compose ps
 
           - name: Perform checks
             run: |
