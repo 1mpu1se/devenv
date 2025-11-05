@@ -3,6 +3,7 @@ import unittest
 import boto3
 import psycopg2
 import redis
+import elasticsearch
 
 
 class Test(unittest.TestCase):
@@ -34,7 +35,7 @@ class Test(unittest.TestCase):
             'port': 5432,
             'user': 'postgres',
             'password': 'postgres',
-            'database': 'postgres'
+            'database': 'postgres',
         }
 
         # Connect
@@ -112,6 +113,45 @@ class Test(unittest.TestCase):
             )['ResponseMetadata']['HTTPStatusCode'],
             204
         )
+
+    def test_elasticsearch(self):
+        # Configure
+        c = {
+            'host': 'localhost',
+            'port': 9200,
+            'user': 'elastic',
+            'password': 'elastic',
+            'data': {
+                'id': 1,
+                'index': 'foo',
+                'document': {
+                    'content': 'python is the best language',
+                },
+                'query': {
+                    'content': 'the best language',
+                },
+            },
+        }
+
+        # Connect
+        es = elasticsearch.Elasticsearch(
+            hosts=f'http://{c["host"]}:{c["port"]}',
+            basic_auth=(c['user'], c['password']),
+        )
+        self.assertTrue(es.ping())
+
+        # Index
+        es.index(index=c['data']['index'], id=c['data']['id'], document=c['data']['document'])
+
+        # Get
+        self.assertEqual(
+            es.get(index=c['data']['index'], id=c['data']['id'])['_source'],
+            c['data']['document']
+        )
+
+        # Search
+        r = es.search(index=c['data']['index'], body={'query': {'match': c['data']['query']}})
+        self.assertGreater(len(r['hits']['hits']), 0)
 
 
 if __name__ == "__main__":
