@@ -25,7 +25,7 @@ jobs:
 
           - name: Run services
             run: |
-                docker compose up -d && sleep 120
+                docker compose up -d && sleep 60
 
           - name: Explore process status
             run: |
@@ -34,6 +34,10 @@ jobs:
           - name: Explore logs
             run: |
                 docker compose logs -t -n 20
+
+          - name: Curl to elasticsearch
+            run: |
+                curl --user elastic:elastic http://127.0.0.1:9200
 
           - name: Perform checks
             run: |
