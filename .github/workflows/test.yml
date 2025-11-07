@@ -23,13 +23,25 @@ jobs:
             run: |
                 python -m pip install redis==7.0.0 psycopg2-binary==2.9.11 boto3==1.40.59 elasticsearch==9.2.0
 
+          - name: Chown directory for elasticsearch
+            run: |
+                sudo chown -R 1000:1000 ./data/elasticsearch/
+
           - name: Run services
             run: |
-                docker compose up -d && sleep 30
+                docker compose up -d
 
-          - name: Explore process status
+          - name: Wait for startup
+            run: |
+                sleep 30
+
+          - name: Explore ps
             run: |
                 docker compose ps
+
+          - name: Explore logs
+            run: |
+                docker compose logs
 
           - name: Perform checks
             run: |

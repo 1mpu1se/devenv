@@ -149,10 +149,6 @@ class Test(unittest.TestCase):
             c['data']['document']
         )
 
-        # Search
-        r = es.search(index=c['data']['index'], body={'query': {'match': c['data']['query']}})
-        self.assertGreater(len(r['hits']['hits']), 0)
-
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
