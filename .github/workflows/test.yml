@@ -23,28 +23,25 @@ jobs:
             run: |
                 python -m pip install redis==7.0.0 psycopg2-binary==2.9.11 boto3==1.40.59 elasticsearch==9.2.0
 
-          - name: Configure sysctl limits
+          - name: Chown dirs for elasticsearch
             run: |
-                sudo swapoff -a
-                sudo sysctl -w vm.swappiness=1
-                sudo sysctl -w fs.file-max=262144
-                sudo sysctl -w vm.max_map_count=262144
+                sudo chown -R 1000:1000 ./data/elasticsearch/
 
           - name: Run services
             run: |
-                docker compose up -d && sleep 60
+                docker compose up -d
 
-          - name: Explore process status
+          - name: Wait for startup
+            run: |
+                sleep 30
+
+          - name: Explore ps
             run: |
                 docker compose ps
 
           - name: Explore logs
             run: |
-                docker compose logs -t -n 20
-
-          - name: Curl to elasticsearch
-            run: |
-                curl --user elastic:elastic http://127.0.0.1:9200
+                docker compose logs
 
           - name: Perform checks
             run: |
