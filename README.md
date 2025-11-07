@@ -5,14 +5,18 @@
 ## #1 Запуск
 1. Установить [Docker](https://docs.docker.com/get-started/) с [Docker Compose](https://docs.docker.com/compose/).
 2. Скачать последний zip-релиз со [страницы релизов](https://github.com/1mpu1se/devenv/releases) и распаковать содержимое в отдельную папку.
-3. Для запуска сервисов необходимо через терминал перейти в папку с файлом `docker-compose.yaml` и выполнить команду:
+3. ⚠️ Если вы используете Docker c бэкэндом на Unix-системе (кроме WSL/WSL2), то Elasticsearch потребует установку прав пользователю 1000 на папку `data/elasticsearch`.
+   Например, чтобы выдать права, в папке с файлом `docker-compose.yaml` можно выполнить команду:
+   ```sh
+   sudo chown -R 1000:1000 ./data/elasticsearch/
+   ```
+4. Для запуска сервисов в папке с файлом `docker-compose.yaml` необходимо выполнить команду:
    
    ```sh
    docker compose up -d
    ```
    
    После загрузки изображений, сервисы станут доступны по данным, указанным ниже.
-
 
 ## #2 Остановка
 Для остановки всех сервисов в той же папке необходимо выполнить команду:
@@ -43,11 +47,3 @@ docker compose down
 |    postgres   | 5432 |  postgres  |  postgres  |   postgres  |      Реляционная БД      |
 |     minio     | 9000 | minioadmin | minioadmin |      -      | Объектное хранилище (S3) |
 | elasticsearch | 9200 |   elastic  |   elastic  |      -      |     Поисковая система    |
-
-## #5 ⚠️ Для Docker на Unix системах (кроме WSL)
-Elasticsearch требует установку прав пользователю 1000 на директорию `data/elasticsearch`.
-
-Например, чтобы выдать права, в папке с файлом `docker-compose.yaml` можно выполнить команду:
-```sh
-sudo chown -R 1000:1000 ./data/elasticsearch/
-```
